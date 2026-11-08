@@ -1,0 +1,41 @@
+main {
+  display: flex;
+  justify-content: center;
+  gap: 5rem;
+}
+
+.point-control {
+  display: flex;
+  justify-content: center;
+}
+
+.btn-add-point,
+.btn-remove-point {
+  flex: 0.25;
+}
+
+.point-control-label {
+  flex: 0.5;
+  text-align: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 30%;
+}
+
+.label-text::after {
+  content: ":";
+  margin-right: 0.7em;
+}
+
+.buttons {
+  display: flex;
+  align-item: stretch;
+
+  & > button {
+    flex: 1;
+  }
+}

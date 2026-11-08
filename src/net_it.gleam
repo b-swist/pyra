@@ -1,5 +1,9 @@
-import gleam/io
+import lustre
+import model.{init, update}
+import view.{view}
 
-pub fn main() -> Nil {
-  io.println("Hello from net_it!")
+pub fn main() {
+  let app = lustre.simple(init, update, view)
+  let assert Ok(_) = lustre.start(app, "#app", Nil)
+  Nil
 }
