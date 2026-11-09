@@ -1,20 +1,20 @@
-# net_it
+# pyra
 
-[![Package Version](https://img.shields.io/hexpm/v/net_it)](https://hex.pm/packages/net_it)
-[![Hex Docs](https://img.shields.io/badge/hex-docs-ffaff3)](https://net-it.hexdocs.pm/)
+[![Package Version](https://img.shields.io/hexpm/v/pyra)](https://hex.pm/packages/pyra)
+[![Hex Docs](https://img.shields.io/badge/hex-docs-ffaff3)](https://pyra.hexdocs.pm/)
 
 ```sh
-gleam add net_it@1
+gleam add pyra@1
 ```
 ```gleam
-import net_it
+import pyra
 
 pub fn main() -> Nil {
   // TODO: An example of the project in use
 }
 ```
 
-Further documentation can be found at <https://net-it.hexdocs.pm/>.
+Further documentation can be found at <https://pyra.hexdocs.pm/>.
 
 ## Development
 
