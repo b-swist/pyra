@@ -1,4 +1,5 @@
 import formal/form.{type Form}
+import gleam/float
 import gleam/int
 import gleam/list
 import gleam/option.{None, Some}
@@ -6,19 +7,28 @@ import lustre/attribute as attr
 import lustre/element.{type Element}
 import lustre/element/html
 import lustre/event
-import model.{
-  type Message, type Model, UserClickedAddPoint, UserClickedCalculate,
-  UserClickedRemovePoint,
-}
-import pyramid.{type Pyramid}
+import model.{type Message, type Model}
+import pyramid.{type Point, type Pyramid, unfold_pyramid}
 
 pub fn view(model: Model) -> Element(Message) {
   html.main([], [
     html.div([], [point_count_control(model), form_view(model.state)]),
     html.div([attr.class("output")], case model.output {
       None -> [html.text("no input")]
-      Some(_) -> [html.text("pyramid")]
+      Some(pyramid) ->
+        pyramid
+        |> unfold_pyramid
+        |> list.map(fn(ps) { [point_view(ps.0), point_view(ps.1)] })
+        |> list.flatten
     }),
+  ])
+}
+
+fn point_view(p: Point) -> Element(Message) {
+  let x = p.x |> float.to_precision(2) |> float.to_string
+  let y = p.y |> float.to_precision(2) |> float.to_string
+  html.div([], [
+    html.text("(" <> x <> ", " <> y <> ")"),
   ])
 }
 
@@ -33,10 +43,10 @@ fn point_count_control(model: Model) -> Element(Message) {
     html.button(
       [
         attr.class("btn-remove-point"),
-        event.on_click(UserClickedRemovePoint),
+        event.on_click(model.UserClickedRemovePoint),
         case count <= min_count {
           True -> attr.style("visibility", "hidden")
-          False -> attr.style("visibility", "")
+          False -> attr.none()
         },
       ],
       [html.text("-")],
@@ -47,8 +57,11 @@ fn point_count_control(model: Model) -> Element(Message) {
     html.button(
       [
         attr.class("btn-add-point"),
-        event.on_click(UserClickedAddPoint),
-        attr.hidden(count >= max_count),
+        event.on_click(model.UserClickedAddPoint),
+        case count >= max_count {
+          True -> attr.style("visibility", "hidden")
+          False -> attr.none()
+        },
       ],
       [html.text("+")],
     ),
@@ -71,7 +84,7 @@ fn form_view(state: Form(Pyramid)) -> Element(Message) {
   html.form(
     [
       attr.class("form"),
-      event.on_submit(UserClickedCalculate),
+      event.on_submit(model.UserClickedCalculate),
       // event.on_reset(UserClickedReset),
     ],
     [
@@ -123,6 +136,7 @@ fn field(
       html.span([attr.class("label-text")], [html.text(label)]),
       html.input([
         attr.type_("text"),
+        attr.autocomplete("off"),
         attr.inputmode("decimal"),
         attr.name(name),
         attr.value(value),
